@@ -12,6 +12,7 @@ client.on('ready', () => {
         guild.channels.forEach((channel) => {
             console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`);
         });
+        console.log();
     });
 
     client.on('message', (receivedMessage) => {
@@ -40,13 +41,24 @@ function processCommand(receivedMessage: Discord.Message) {
     let primaryCommand = splitCommand[0]; // The first word directly after the exclamation is the command
     let args = splitCommand.slice(1); // All other words are arguments/parameters/options for the command
 
+    console.log("Command issues by: " + receivedMessage.author.username);
     console.log("Command received: " + primaryCommand);
     console.log("Arguments: " + args); // There may not be any arguments
+    console.log();
 
-    if (primaryCommand == "purge") {
-        purgeCommand(args, receivedMessage);
-    } else {
-        receivedMessage.channel.send("I don't understand the command.");
+    switch (primaryCommand) {
+        case "help":
+            helpCommand(args, receivedMessage);
+            break;
+        case "purge":
+            purgeCommand(args, receivedMessage);
+            break;
+        case "ping":
+            pingCommand(args, receivedMessage);
+            break;
+        default:
+            receivedMessage.channel.send("I don't understand the command.");
+            break;
     }
 }
 function purgeCommand(args: string[], receivedMessage: Discord.Message) {
@@ -60,7 +72,7 @@ function purgeCommand(args: string[], receivedMessage: Discord.Message) {
                         })
                     );
                 } else {
-                    receivedMessage.channel.send("This Channel is not a text channel");
+                    receivedMessage.channel.send("This Channel is not a text channel.");
                 }
                 break;
             case "self":
@@ -71,7 +83,7 @@ function purgeCommand(args: string[], receivedMessage: Discord.Message) {
                         })
                     );
                 } else {
-                    receivedMessage.channel.send("This Channel is not a text channel");
+                    receivedMessage.channel.send("This Channel is not a text channel.");
                 }
                 break;
             default:
@@ -81,4 +93,13 @@ function purgeCommand(args: string[], receivedMessage: Discord.Message) {
     } else {
         receivedMessage.channel.send("I don't understand the command.");
     }
+}
+function pingCommand(args: string[], receivedMessage: Discord.Message) {
+    receivedMessage.channel.send('pong');
+}
+function helpCommand(args: string[], receivedMessage: Discord.Message) {
+    receivedMessage.channel.send('Available commands: \n' +
+                                 '!help\n' +
+                                 '!purge (channel, self)\n' +
+                                 '!ping\n');
 }
