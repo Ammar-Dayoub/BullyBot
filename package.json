@@ -1,0 +1,23 @@
+{
+  "name": "bullybot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "dependencies": {
+    "discord.js": "^11.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ammar-Dayoub/BullyBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ammar-Dayoub/BullyBot/issues"
+  },
+  "homepage": "https://github.com/Ammar-Dayoub/BullyBot#readme"
+}
