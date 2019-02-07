@@ -93,4 +93,5 @@ packages/
 
 # Custom
 /secrets.js
+/secrets.ts
 .vscode
