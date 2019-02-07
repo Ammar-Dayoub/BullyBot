@@ -63,6 +63,17 @@ function purgeCommand(args: string[], receivedMessage: Discord.Message) {
                     receivedMessage.channel.send("This Channel is not a text channel");
                 }
                 break;
+            case "self":
+                if (receivedMessage.channel instanceof Discord.TextChannel) {
+                    receivedMessage.channel.fetchMessages().then(
+                        messages => messages.forEach(message => {
+                            message.deletable && message.author == client.user && message.delete();
+                        })
+                    );
+                } else {
+                    receivedMessage.channel.send("This Channel is not a text channel");
+                }
+                break;
             default:
                 receivedMessage.channel.send("I don't understand the command.");
                 break;
