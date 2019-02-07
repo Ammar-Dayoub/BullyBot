@@ -93,6 +93,5 @@ packages/
 
 # Custom
 out/
-/secrets.js
-/secrets.ts
+*secrets*
 .vscode

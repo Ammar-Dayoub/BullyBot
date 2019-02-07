@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js';
-import { bot_secret_token } from './secrets';
+import * as Secrets from './secrets.json';
 const client = new Discord.Client();
 
 client.on('ready', () => {
@@ -20,16 +20,20 @@ client.on('ready', () => {
             return;
         }
 
+        // Process command message
         if (receivedMessage.content.startsWith("!")) {
             processCommand(receivedMessage);
-        } else {
-            receivedMessage.channel.send("Message received: " + receivedMessage.content);
+            return;
         }
+
+        // Normal bot functions
+        receivedMessage.channel.send("Message received: " + receivedMessage.content);
     });
 });
 
-client.login(bot_secret_token);
+client.login(Secrets.bot_secret_token);
 
+// Helper functions
 function processCommand(receivedMessage: Discord.Message) {
     let fullCommand: string = receivedMessage.content.substr(1); // Remove the leading exclamation mark
     let splitCommand = fullCommand.split(" "); // Split the message up in to pieces for each space

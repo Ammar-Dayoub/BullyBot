@@ -3,6 +3,8 @@
         "target": "esnext",
         "module": "commonjs",
         "outDir": "out",
-        "sourceMap": true
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
     }
 }
