@@ -92,6 +92,7 @@ _ReSharper*/
 packages/
 
 # Custom
+out/
 /secrets.js
 /secrets.ts
 .vscode
