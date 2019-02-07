@@ -95,7 +95,7 @@ function purgeCommand(args: string[], receivedMessage: Discord.Message) {
     }
 }
 function pingCommand(args: string[], receivedMessage: Discord.Message) {
-    receivedMessage.channel.send('pong');
+    receivedMessage.channel.send(client.ping + "ms");
 }
 function helpCommand(args: string[], receivedMessage: Discord.Message) {
     receivedMessage.channel.send('Available commands: \n' +
