@@ -1,13 +1,27 @@
+const Secrets = require('./secrets.js')
 const Discord = require('discord.js')
-const Secrets = require('secrets.js')
 const client = new Discord.Client()
 
 client.on('ready', () => {
-    console.log("Connected as " + client.user.tag)
-})
+    // List servers the bot is connected to
+    console.log("Servers:")
+    client.guilds.forEach((guild) => {
+        console.log(" - " + guild.name)
 
-// Get your bot's secret token from:
-// https://discordapp.com/developers/applications/
-// Click on your application -> Bot -> Token -> "Click to Reveal Token"
+        // List all channels
+        guild.channels.forEach((channel) => {
+            console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`)
+        })
+    })
+
+    client.on('message', (receivedMessage) => {
+        // Prevent bot from responding to its own messages
+        if (receivedMessage.author == client.user) {
+            return
+        }
+    
+        receivedMessage.channel.send("Message received: " + receivedMessage.content)
+    })
+})
 
 client.login(Secrets.bot_secret_token)
