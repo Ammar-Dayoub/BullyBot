@@ -4,6 +4,7 @@
         "module": "commonjs",
         "outDir": "out",
         "sourceMap": true,
+        "removeComments": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
     }

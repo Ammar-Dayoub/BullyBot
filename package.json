@@ -1,13 +1,17 @@
 {
   "name": "bullybot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord Commando Core Bot",
   "main": "bot.ts",
   "dependencies": {
     "@types/node": "^10.12.21",
-    "discord.js": "^11.4.2"
+    "discord.js": "^11.4.2",
+    "discord.js-commando": "^0.10.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
+  },
   "scripts": {
     "prestart": "tsc",
     "start": "node .\\out\\bot.js"
