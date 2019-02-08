@@ -15,7 +15,7 @@ client.registry
     .registerGroup("custom", "Custom")
     // Registers all built-in groups, commands, and argument types
     .registerDefaults()
-    // Registers all of your commands in the ./commands/ directory
+    // Registers all commands in the ./commands/ directory
     .registerCommandsIn(join(__dirname, "commands"));
 
 client.on("ready", () => {
@@ -23,11 +23,6 @@ client.on("ready", () => {
     console.log("Servers:");
     client.guilds.forEach((guild) => {
         console.log(" - " + guild.name);
-
-        // List all channels
-        guild.channels.forEach((channel) => {
-            console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`);
-        });
         console.log();
     });
 

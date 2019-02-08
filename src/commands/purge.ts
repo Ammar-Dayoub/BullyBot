@@ -18,28 +18,30 @@ export class purgeCommand extends Command {
             if (args) {
                 switch (args) {
                     case "channel":
-                        recievedMessage.channel.fetchMessages().then(
-                            (messages) => messages.forEach((message) => {
-                                message.deletable && message.delete();
-                            }),
-                        );
+                        recievedMessage.channel.fetchMessages()
+                            .then(async (messages) => {
+                                for (const message of messages.values()) {
+                                    message.deletable && await message.delete();
+                                }
+                            });
                         break;
                     case "self":
-                        recievedMessage.channel.fetchMessages().then(
-                            (messages) => messages.forEach((message) => {
-                                message.deletable && message.author === this.client.user && message.delete();
-                            }),
-                        );
+                        recievedMessage.channel.fetchMessages()
+                            .then(async (messages) => {
+                                for (const message of messages.values()) {
+                                    message.deletable && message.author === this.client.user && await message.delete();
+                                }
+                            });
                         break;
                     default:
-                        recievedMessage.channel.send("I don't understand the command.");
+                        await recievedMessage.channel.send("I don't understand the command.");
                         break;
                 }
             } else {
-                recievedMessage.channel.send("I don't understand the command.");
+                await recievedMessage.channel.send("I don't understand the command.");
             }
         } else {
-            recievedMessage.reply("This Channel is not a text channel.");
+            await recievedMessage.reply("This Channel is not a text channel.");
         }
         return;
     }

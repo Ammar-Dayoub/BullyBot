@@ -2,10 +2,11 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "commonjs",
-        "outDir": "out",
+        "outDir": "build",
         "sourceMap": true,
         "removeComments": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-    }
+        "typeRoots" : ["./node_modules/@types", "./typings"],
+    },
 }

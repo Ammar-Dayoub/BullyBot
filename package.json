@@ -2,24 +2,27 @@
   "name": "bullybot",
   "version": "1.0.0",
   "description": "Discord Commando Core Bot",
-  "main": "bot.ts",
+  "main": "src/index.ts",
   "dependencies": {
     "@types/node": "^10.12.21",
+    "bufferutil": "^3.0.3",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
+    "erlpack": "discordapp/erlpack",
     "ffmpeg-binaries": "^4.0.0",
-    "fs": "0.0.1-security",
+    "libsodium-wrappers": "^0.7.3",
     "node-gyp": "^3.8.0",
-    "node-opus": "^0.3.1",
+    "node-opus": "^0.2.7",
     "windows-build-tools": "^5.1.0"
   },
   "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.32",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   },
   "scripts": {
-    "prestart": "tsc",
-    "start": "node .\\out\\bot.js"
+    "start": "ts-node src",
+    "dev": "ts-node-dev --transpileOnly src"
   },
   "repository": {
     "type": "git",
