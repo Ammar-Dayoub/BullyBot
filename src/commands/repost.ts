@@ -33,8 +33,10 @@ export class repostCommand extends Command {
                 });
             // !repost >>> tag message before command
         } else {
-            recievedMessage.channel.fetchMessages({ limit: 2 })
-                .then(async (messages) => tagMessage(messages[0]))
+            recievedMessage.channel.fetchMessages({before: recievedMessage.id, limit: 1})
+                .then(async (messages) =>
+                    tagMessage(messages.first()),
+                )
                 .catch();
         }
         // Delete the command message
