@@ -6,7 +6,7 @@ export class purgeCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             description: "Deletes all messages",
-            examples: ["purge channel", "purge self"],
+            examples: ["!purge channel", "!purge self"],
             group: "admin",
             memberName: "purge",
             name: "purge",
