@@ -19,21 +19,22 @@ export class repostCommand extends Command {
     public async run(recievedMessage: CommandMessage, args: object | string | string[]): Promise<Message | Message[]> {
         // !repost <id> >>> tag message with id = <id>
         if (args) {
-            recievedMessage.channel.fetchMessage(args.toString()).then((message) => {
-                tagMessage(message);
-            }).catch(() => {
-                recievedMessage.channel.send("The message was not found. use a valid messageId for an existing message")
-                    .then(async (sentMessage: Message) => {
-                        // Delete the error message after 5 seconds
-                        await delay(5000);
-                        sentMessage.deletable && sentMessage.delete();
-                    })
-                    .catch();
-            });
+            recievedMessage.channel.fetchMessage(args.toString())
+                .then(async (message) => { tagMessage(message); })
+                .catch(() => {
+                    recievedMessage.channel
+                        .send("The message was not found. use a valid messageId for an existing message")
+                        .then(async (sentMessage: Message) => {
+                            // Delete the error message after 5 seconds
+                            await delay(5000);
+                            sentMessage.deletable && sentMessage.delete();
+                        })
+                        .catch();
+                });
             // !repost >>> tag message before command
         } else {
             recievedMessage.channel.fetchMessages({ limit: 2 })
-                .then((messages) => tagMessage(messages[0]))
+                .then(async (messages) => tagMessage(messages[0]))
                 .catch();
         }
         // Delete the command message
@@ -42,8 +43,9 @@ export class repostCommand extends Command {
     }
 }
 
-function tagMessage(message: Message): void {
-    emojis.forEach((emoji) => {
-        message.react(emoji);
-    });
+async function tagMessage(message: Message): Promise<void> {
+    for (const emoji of emojis) {
+        await message.react(emoji);
+    }
+    return;
 }
