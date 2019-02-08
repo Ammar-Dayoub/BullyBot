@@ -1,5 +1,6 @@
 import { CommandoClient } from "discord.js-commando";
 import { join } from "path";
+import * as Addons from "./Addons";
 import Secrets from "./secrets.json";
 
 const client = new CommandoClient({
@@ -36,5 +37,8 @@ client.on("ready", () => {
         }
     });
 });
+
+// Custom method calls go here
+// Addons.typingStart(client);
 
 client.login(Secrets.bot_secret_token);
