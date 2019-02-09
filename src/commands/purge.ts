@@ -1,47 +1,63 @@
-import { Message, TextChannel } from "discord.js";
+import { Message } from "discord.js";
 import { Command, CommandMessage, CommandoClient } from "discord.js-commando";
 
 // tslint:disable-next-line:class-name
 export class purgeCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
+            args: [
+                {
+                    key: "target",
+                    prompt: "Which messages should be deleted (self, channel)",
+                    type: "string",
+                    // Use oneOf instead of validate when it's available
+                    validate: (argumentValue: string) => {
+                        return (argumentValue === "channel" || argumentValue === "self");
+                    },
+                },
+            ],
             description: "Deletes all messages",
             examples: ["!purge channel", "!purge self"],
             group: "admin",
             memberName: "purge",
             name: "purge",
+            ownerOnly: true,
         });
     }
 
-    public async run(recievedMessage: CommandMessage, args: object | string | string[]): Promise<Message | Message[]> {
-        if (recievedMessage.channel instanceof TextChannel) {
-            if (args) {
-                switch (args) {
-                    case "channel":
-                        recievedMessage.channel.fetchMessages()
-                            .then(async (messages) => {
-                                for (const message of messages.values()) {
-                                    message.deletable && await message.delete();
+    public async run(recievedMessage: CommandMessage, args: { target: string }): Promise<Message | Message[]> {
+        let lastMessageId: string;
+        let hasMessages: boolean = true;
+        switch (args.target) {
+            case "channel":
+                do {
+                    await recievedMessage.channel.fetchMessages({ limit: 100 })
+                        .then(async (messages) => {
+                            if (messages.size < 100) { hasMessages = false; }
+                            for (const message of messages.values()) {
+                                message.deletable && await message.delete();
+                            }
+                        })
+                        .catch((error) => { console.log(error); });
+                } while (hasMessages);
+                break;
+            case "self":
+                do {
+                    await recievedMessage.channel.fetchMessages({ before: lastMessageId, limit: 100 })
+                        .then(async (messages) => {
+                            if (messages.size < 100) { hasMessages = false; }
+                            for (const message of messages.values()) {
+                                lastMessageId = message.id;
+                                if (message.deletable && message.author === this.client.user) {
+                                    await message.delete();
                                 }
-                            });
-                        break;
-                    case "self":
-                        recievedMessage.channel.fetchMessages()
-                            .then(async (messages) => {
-                                for (const message of messages.values()) {
-                                    message.deletable && message.author === this.client.user && await message.delete();
-                                }
-                            });
-                        break;
-                    default:
-                        await recievedMessage.channel.send("I don't understand the command.");
-                        break;
-                }
-            } else {
-                await recievedMessage.channel.send("I don't understand the command.");
-            }
-        } else {
-            await recievedMessage.reply("This Channel is not a text channel.");
+                            }
+                        })
+                        .catch((error) => { console.log(error); });
+                } while (hasMessages);
+                break;
+            default:
+                break;
         }
         return;
     }

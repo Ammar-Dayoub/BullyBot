@@ -8,6 +8,14 @@ const emojis: string[] = ["🇷", "🇪", "🇵", "🇴", "🇸", "🇹"];
 export class repostCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
+            args: [
+                {
+                    default: "",
+                    key: "messageId",
+                    prompt: "Which message should be tagged",
+                    type: "string",
+                },
+            ],
             description: "Tags messages as repost",
             examples: ["!repost", "!repost <messageId>"],
             group: "admin",
@@ -16,18 +24,18 @@ export class repostCommand extends Command {
         });
     }
 
-    public async run(recievedMessage: CommandMessage, args: object | string | string[]): Promise<Message | Message[]> {
+    public async run(recievedMessage: CommandMessage, args: { messageId: string }): Promise<Message | Message[]> {
         // !repost <id> >>> tag message with id = <id>
-        if (args) {
-            recievedMessage.channel.fetchMessage(args.toString())
-                .then(async (message) => { tagMessage(message); })
+        if (args.messageId) {
+            await recievedMessage.channel.fetchMessage(args.messageId)
+                .then(async (message) => { await tagMessage(message); })
                 .catch(() => {
                     recievedMessage.channel
                         .send("The message was not found. use a valid messageId for an existing message")
                         .then(async (sentMessage: Message) => {
                             // Delete the error message after 5 seconds
                             await delay(5000);
-                            sentMessage.deletable && sentMessage.delete();
+                            sentMessage.deletable && await sentMessage.delete();
                         })
                         .catch();
                 });
@@ -35,11 +43,9 @@ export class repostCommand extends Command {
         } else {
             recievedMessage.channel.fetchMessages({ before: recievedMessage.id, limit: 1 })
                 .then(async (messages) =>
-                    tagMessage(messages.first()),
+                    await tagMessage(messages.first()),
                 );
         }
-        // Delete the command message
-        recievedMessage.delete();
         return;
     }
 }

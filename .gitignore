@@ -92,6 +92,6 @@ _ReSharper*/
 packages/
 
 # Custom
-build/
+out/
 *secrets*
 .vscode

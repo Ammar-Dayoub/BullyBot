@@ -1,18 +1,20 @@
 import { CommandoClient } from "discord.js-commando";
 import { join } from "path";
-import * as Addons from "./Addons";
+import * as Addons from "./addons";
 import Secrets from "./secrets.json";
 
 const client = new CommandoClient({
     commandPrefix: Secrets.command_prefix,
-    owner: Secrets.owner_id,
+    owner: Secrets.owners,
 });
 
 //  Register commands
 client.registry
     // Registers custom groups
-    .registerGroup("admin", "Admin")
-    .registerGroup("custom", "Custom")
+    .registerGroups([
+        ["admin", "Admin"],
+        ["custom", "Custom"],
+    ])
     // Registers all built-in groups, commands, and argument types
     .registerDefaults()
     // Registers all commands in the ./commands/ directory
@@ -23,7 +25,6 @@ client.on("ready", () => {
     console.log("Servers:");
     client.guilds.forEach((guild) => {
         console.log(" - " + guild.name);
-        console.log();
     });
 
     client.on("message", (receivedMessage) => {
