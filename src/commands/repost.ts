@@ -18,7 +18,7 @@ export class repostCommand extends Command {
             ],
             description: "Tags messages as repost",
             examples: ["!repost", "!repost <messageId>"],
-            group: "admin",
+            group: "custom",
             memberName: "repost",
             name: "repost",
         });

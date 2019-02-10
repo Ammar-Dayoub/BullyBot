@@ -55,6 +55,7 @@ export class purgeCommand extends Command {
                         })
                         .catch((error) => { console.log(error); });
                 } while (hasMessages);
+                await recievedMessage.deletable && recievedMessage.delete();
                 break;
             default:
                 break;
