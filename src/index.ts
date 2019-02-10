@@ -26,13 +26,6 @@ client.on("ready", () => {
     client.guilds.forEach((guild) => {
         console.log(" - " + guild.name);
     });
-
-    client.on("message", (receivedMessage) => {
-        // Prevent bot from responding to its own messages
-        if (receivedMessage.author === client.user) {
-            return;
-        }
-    });
 });
 
 // Custom method calls go here
