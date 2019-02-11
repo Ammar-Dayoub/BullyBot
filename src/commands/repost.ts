@@ -46,6 +46,7 @@ export class repostCommand extends Command {
                     await tagMessage(messages.first()),
                 );
         }
+		await recievedMessage.deletable && recievedMessage.delete();
         return;
     }
 }
