@@ -34,8 +34,9 @@ export class purgeCommand extends Command {
                     await recievedMessage.channel.fetchMessages({ limit: 100 })
                         .then(async (messages) => {
                             if (messages.size < 100) { hasMessages = false; }
+                            messages = messages.filter((m) => m.deletable);
                             for (const message of messages.values()) {
-                                message.deletable && await message.delete();
+                                await message.delete();
                             }
                         })
                         .catch((error) => { console.log(error); });
@@ -46,11 +47,10 @@ export class purgeCommand extends Command {
                     await recievedMessage.channel.fetchMessages({ before: lastMessageId, limit: 100 })
                         .then(async (messages) => {
                             if (messages.size < 100) { hasMessages = false; }
+                            lastMessageId = messages.last().id;
+                            messages = messages.filter((m) => m.deletable && m.author === this.client.user);
                             for (const message of messages.values()) {
-                                lastMessageId = message.id;
-                                if (message.deletable && message.author === this.client.user) {
-                                    await message.delete();
-                                }
+                                await message.delete();
                             }
                         })
                         .catch((error) => { console.log(error); });
