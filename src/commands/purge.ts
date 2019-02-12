@@ -8,16 +8,24 @@ export class purgeCommand extends Command {
             args: [
                 {
                     key: "target",
-                    prompt: "Which messages should be deleted (self, channel)",
+                    prompt: "Which messages should be deleted (self, channel, amount <number>)",
                     type: "string",
                     // Use oneOf instead of validate when it's available
                     validate: (argumentValue: string) => {
-                        return (argumentValue === "channel" || argumentValue === "self");
+                        return (argumentValue === "channel" || argumentValue === "self" || argumentValue === "amount");
                     },
                 },
+                {
+                    default: 0,
+                    key: "amount",
+                    max: 100,
+                    min: 1,
+                    prompt: "How many messages should be deleted",
+                    type: "integer",
+                },
             ],
-            description: "Deletes all messages",
-            examples: ["!purge channel", "!purge self"],
+            description: "Deletes messages",
+            examples: ["!purge channel", "!purge self", "!purge amount <number>"],
             group: "admin",
             memberName: "purge",
             name: "purge",
@@ -25,7 +33,8 @@ export class purgeCommand extends Command {
         });
     }
 
-    public async run(recievedMessage: CommandMessage, args: { target: string }): Promise<Message | Message[]> {
+    public async run(recievedMessage: CommandMessage, args: { target: string, amount: number })
+        : Promise<Message | Message[]> {
         let lastMessageId: string;
         let hasMessages: boolean = true;
         switch (args.target) {
@@ -43,6 +52,8 @@ export class purgeCommand extends Command {
                 } while (hasMessages);
                 break;
             case "self":
+                // Delete command message
+                await recievedMessage.deletable && recievedMessage.delete();
                 do {
                     await recievedMessage.channel.fetchMessages({ before: lastMessageId, limit: 100 })
                         .then(async (messages) => {
@@ -55,7 +66,12 @@ export class purgeCommand extends Command {
                         })
                         .catch((error) => { console.log(error); });
                 } while (hasMessages);
+                break;
+            case "amount":
+                // Delete command message
                 await recievedMessage.deletable && recievedMessage.delete();
+                args.amount && await recievedMessage.channel.bulkDelete(args.amount)
+                    .catch(console.log);
                 break;
             default:
                 break;
